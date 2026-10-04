@@ -3,7 +3,25 @@
 .example-copy>.explain{font-size:14px;line-height:1.7;margin-bottom:17px}
 .interpretation-list{display:grid;gap:14px}
 .interpretation-card{border:1px solid #dfe8f5;border-radius:13px;background:#fbfdff;padding:17px 18px}
-.interpretation-card h4{font-size:14px;color:#28416d;margin:0 0 12px}
+.interpretation-card h4{font-size:15px;color:#28416d;margin:0 0 10px}
+.meaning-headline{font-size:clamp(20px,2.2vw,27px)!important;line-height:1.4;color:#213965;margin:0 0 10px!important}
+.meaning-summary{font-size:16px;line-height:1.8;color:#314565;margin:0 0 20px}
+.visible-feature{font-size:13px;color:#667994;margin:0 0 8px;line-height:1.65}
+.plain-meaning{font-size:15px;line-height:1.8;color:#273955;margin:0}
+.meaning-overview{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin:0 0 18px}
+.meaning-overview-item{text-align:left;border:1px solid #dce5f5;border-radius:12px;background:#fff;padding:14px 16px;color:#273955;cursor:pointer}
+.meaning-overview-item:hover,.meaning-overview-item:focus-visible{border-color:#315bed;background:#f3f6ff}
+.meaning-overview-item span{display:block;color:#315bed;font-size:12px;font-weight:800;margin-bottom:6px}
+.meaning-overview-item strong{display:block;font-size:14px;line-height:1.5}
+.optional-context{margin-top:16px;border:1px solid #e5eaf3;border-radius:12px;padding:14px 18px}
+.optional-context summary{cursor:pointer;font-weight:800;color:#435674}
+.optional-context summary small{font-weight:500;color:#77849a}
+.optional-context>p{font-size:13px;color:#62718a;margin:10px 0 18px}
+.optional-context .form-grid{margin-top:18px}
+.report-page .report-grid{display:block}
+.report-page .report-main{display:block}
+.report-page .report-main>.optional-context{margin-top:17px}
+.report-page .report-panel>.source-details{margin-top:20px;background:#f8faff}
 .interpretation-step{padding:10px 0;border-top:1px solid #e8eef6}
 .interpretation-step strong,.interpretation-question strong{display:block;font-size:14px;color:#637a9d;line-height:1.6;margin-bottom:4px}
 .interpretation-step p,.interpretation-question p{font-size:14px;line-height:1.8;margin:0;color:#3d4d67}
@@ -18,5 +36,5 @@
 .interpretation-summary{border-left:3px solid #315bed;background:#f2f6ff;border-radius:0 9px 9px 0;padding:15px 17px;margin-top:16px}
 .interpretation-summary strong{font-size:14px;color:#28416d}
 .interpretation-summary p{font-size:14px;line-height:1.8;color:#4e6284;margin:5px 0 0}
-@media(max-width:760px){.interpretation-card{padding:14px}}
+@media(max-width:760px){.interpretation-card{padding:14px}.meaning-overview{grid-template-columns:1fr}.meaning-overview-item{padding:10px 13px}.meaning-overview-item strong{font-size:13px}}
 @media print{.interpretation-card{break-inside:avoid}.interpretation-list{display:block}.interpretation-card+.interpretation-card{margin-top:12px}}

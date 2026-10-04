@@ -21,8 +21,8 @@ test('saved record excludes uploaded image material and report labels the demo',
   const record = recordFromState(state, new Date('2026-10-04T00:00:00Z'));
   assert.equal(JSON.stringify(record).includes('blob:private'), false);
   assert.equal(JSON.stringify(record).includes('child.png'), false);
-  assert.match(reportText(record), /실제 AI 분석 아님/);
-  assert.match(reportText(record), /분석하거나 기록에 저장하지 않음/);
+  assert.match(reportText(record), /시연용 합성 그림의 고정 설명/);
+  assert.match(reportText(record), /등록한 그림은 분석하거나 기록에 저장하지 않습니다/);
 });
 
 test('malformed saved data is rejected before reading or overwriting it', () => {
@@ -38,6 +38,6 @@ test('uploaded preview and synthetic observations stay explicitly separate', () 
   const state = { activeKind: 'house', sample: false, uploads: { house: { url: 'blob:preview' } }, persistOptIn: false, error: '' };
   const html = renderReport(state, record);
   assert.match(html, /등록한 그림 미리보기 · 분석되지 않음/);
-  assert.match(html, /합성 그림에 관한 관찰 예시/);
-  assert.match(html, /시연 결과 · 실제 AI 분석 아님/);
+  assert.match(html, /시연용 합성 그림 · 실제 아이 그림 아님/);
+  assert.match(html, /시연용 합성 그림의 고정 설명/);
 });

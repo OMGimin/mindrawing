@@ -88,3 +88,5 @@ button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,te
 .drawing-guide p{font-size:14px;color:#62718a;line-height:1.7;margin:4px 0}
 .drawing-guide small{font-size:12px;color:#62718a}
 @media(max-width:760px){.studio-page{padding-top:22px}.work-heading .registration-title{font-size:23px}.drawing-guide{align-items:flex-start;gap:12px}.drawing-guide img{width:84px;height:56px}.drawing-guide strong{display:block}}
+.report-page .synthetic-preview{width:100%;max-width:220px;height:auto;aspect-ratio:2/3}
+.report-page .art-column.sample-only{display:block}

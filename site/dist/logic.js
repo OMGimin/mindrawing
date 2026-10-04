@@ -78,24 +78,23 @@ export function writeRecords(storage, records) {
 
 export function reportText(record) {
   const c = record.context;
-  const guidance = guidanceFor(c);
+  const hasContext = Boolean(c.nickname || c.age || c.concerns.length || c.duration || c.impact || c.note);
   const lines = [
-    '마인드로잉 시연 결과 · 실제 AI 분석 아님',
+    '마인드로잉 · 그림 예시의 의미',
     `작성일: ${new Date(record.createdAt).toLocaleString('ko-KR')}`,
-    '그림: 시연용 합성 그림의 관찰·문헌 해석 예시만 제공. 등록한 그림 파일은 분석하거나 기록에 저장하지 않음.',
-    `해석 설명: 시연용 합성 그림에 미리 작성한 참고 예시. 저장 당시 분석 결과가 아닌 현재 버전(${INTERPRETATION_VERSION})의 문구.`,
+    '시연 안내: 시연용 합성 그림의 고정 설명입니다. 등록한 그림은 분석하거나 기록에 저장하지 않습니다. 아이의 실제 성격이나 상태를 판단하는 결과가 아닙니다.',
+    `설명 버전: ${INTERPRETATION_VERSION}. 저장 당시 분석 결과가 아닌 현재 버전의 문구.`,
     '',
     ...KINDS.flatMap((kind) => [interpretationText(kind), '']),
-    `호칭: ${c.nickname || '입력하지 않음'}`,
-    `나이: ${c.age ? `${c.age}세` : '입력하지 않음'}`,
-    `관심 주제: ${c.concerns.length ? c.concerns.join(', ') : '선택하지 않음'}`,
-    `변화 기간: ${durationLabel(c.duration)}`,
-    `일상 영향: ${impactLabel(c.impact)}`,
-    `보호자 메모: ${c.note || '입력하지 않음'}`,
-    '',
-    `${guidance.title}: ${guidance.body}`,
-    '상담기관 검색: https://www.mentalhealth.go.kr/portal/health/fac/PotalHealthFacListTab2.do',
-    '이 문서는 진단서가 아니며, 상담기관 이용 가능 여부를 보장하지 않습니다.'
+    ...(hasContext ? [
+      '선택하여 남긴 메모',
+      `호칭: ${c.nickname || '입력하지 않음'}`,
+      `나이: ${c.age ? `${c.age}세` : '입력하지 않음'}`,
+      `관심 주제: ${c.concerns.length ? c.concerns.join(', ') : '선택하지 않음'}`,
+      `변화 기간: ${durationLabel(c.duration)}`,
+      `일상 영향: ${impactLabel(c.impact)}`,
+      `보호자 메모: ${c.note || '입력하지 않음'}`
+    ] : [])
   ];
   return lines.join('\n');
 }

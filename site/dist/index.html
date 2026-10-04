@@ -4,8 +4,8 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="theme-color" content="#f6f8fc" />
-    <meta name="description" content="아이의 그림을 함께 살펴보고, 보호자의 관찰을 정리해 상담으로 이어가는 마인드로잉 시연 공간" />
-    <title>마인드로잉 — 아이의 마음을 살피는 첫걸음</title>
+    <meta name="description" content="집·나무·사람 그림에 연결해 온 의미를 쉬운 말로 살펴보는 마인드로잉 시연 공간" />
+    <title>마인드로잉 — 그림 속 의미 살펴보기</title>
     <link rel="icon" href="./favicon.svg" type="image/svg+xml" />
     <link rel="stylesheet" href="./styles.css" />
     <link rel="stylesheet" href="./sample.css" />
@@ -33,25 +33,24 @@
 
       <div class="main-frame">
         <header class="topbar">
-          <div class="breadcrumbs"><span>마인드로잉</span><span class="slash">/</span><strong>그림 살펴보기</strong></div>
+          <div class="breadcrumbs"><span>마인드로잉</span><span class="slash">/</span><strong>그림의 의미</strong></div>
           <div class="top-actions"><span class="demo-pill"><span class="status-dot"></span> 시연 모드</span><button class="text-action" type="button" id="privacy-open">개인정보 안내 <span aria-hidden="true">↗</span></button></div>
         </header>
 
         <main id="main-content" tabindex="-1">
           <section class="studio-page" id="studio-view" aria-labelledby="page-title">
             <div class="work-card">
-              <div class="work-heading"><div><h1 id="page-title" class="registration-title">아이의 그림을 등록해 주세요</h1><p>세 그림을 모두 올리거나, 예시로 먼저 체험할 수 있습니다.</p></div><div class="heading-actions"><button class="sample-button" type="button" data-action="sample">예시로 바로 체험하기</button><span class="step-label">1 / 3 단계</span></div></div>
-              <ol class="stepper" aria-label="진행 단계"><li class="current" aria-current="step"><span>01</span> 그림 등록</li><li><span>02</span> 보호자 관찰</li><li><span>03</span> 결과 살펴보기</li></ol>
+              <div class="work-heading"><div><h1 id="page-title" class="registration-title">집·나무·사람 그림, 어떤 의미로 읽어 왔을까요?</h1><p>그림을 등록해 곁에 두고 보거나, 합성 예시로 바로 살펴보세요. 의미 설명은 예시 그림에 고정되어 있습니다.</p></div><div class="heading-actions"><button class="sample-button" type="button" data-action="sample">예시로 바로 보기</button><span class="step-label">1 / 3 단계</span></div></div>
+              <ol class="stepper" aria-label="진행 단계"><li class="current" aria-current="step"><span>01</span> 그림 등록</li><li><span>02</span> 시연 안내</li><li><span>03</span> 그림의 의미</li></ol>
               <div class="upload-grid" id="upload-grid">
                 <div class="upload-card" data-kind="house"><div class="upload-meta"><span class="upload-number">01</span><span class="upload-letter" aria-hidden="true">H</span></div><h3>집 그림</h3><p>아이가 그린 집 그림</p><div class="drop-target" role="group" aria-label="집 그림 등록"><div class="drop-art" aria-hidden="true"><span class="drop-glyph">⌂</span></div><span class="drop-title">그림을 여기에 놓거나</span><label class="choose-button">파일 선택<input type="file" accept="image/jpeg,image/png,image/webp" name="house" aria-label="집 그림 파일 선택" data-file="house" /></label><span class="drop-help">JPG, PNG, WEBP · 최대 8MB</span></div></div>
                 <div class="upload-card" data-kind="tree"><div class="upload-meta"><span class="upload-number">02</span><span class="upload-letter" aria-hidden="true">T</span></div><h3>나무 그림</h3><p>아이가 그린 나무 그림</p><div class="drop-target" role="group" aria-label="나무 그림 등록"><div class="drop-art" aria-hidden="true"><span class="drop-glyph">♧</span></div><span class="drop-title">그림을 여기에 놓거나</span><label class="choose-button">파일 선택<input type="file" accept="image/jpeg,image/png,image/webp" name="tree" aria-label="나무 그림 파일 선택" data-file="tree" /></label><span class="drop-help">JPG, PNG, WEBP · 최대 8MB</span></div></div>
                 <div class="upload-card" data-kind="person"><div class="upload-meta"><span class="upload-number">03</span><span class="upload-letter" aria-hidden="true">P</span></div><h3>사람 그림</h3><p>아이가 그린 사람 그림</p><div class="drop-target" role="group" aria-label="사람 그림 등록"><div class="drop-art" aria-hidden="true"><span class="drop-glyph">♙</span></div><span class="drop-title">그림을 여기에 놓거나</span><label class="choose-button">파일 선택<input type="file" accept="image/jpeg,image/png,image/webp" name="person" aria-label="사람 그림 파일 선택" data-file="person" /></label><span class="drop-help">JPG, PNG, WEBP · 최대 8MB</span></div></div>
               </div>
-              <div class="work-footer"><p><span aria-hidden="true">◈</span> 그림은 이 브라우저에서만 미리 보여요. 서버에 전송하지 않습니다.</p><div class="footer-actions"><button class="ghost-button" type="button" data-action="sample">예시로 체험하기</button><button class="primary-button" type="button" data-action="next">다음 단계</button></div></div>
+              <div class="work-footer"><p><span aria-hidden="true">◈</span> 등록한 그림은 이 브라우저에서 미리 보기만 합니다. 서버에 전송하지 않습니다.</p><div class="footer-actions"><button class="ghost-button" type="button" data-action="sample">예시로 보기</button><button class="primary-button" type="button" data-action="next">의미 살펴보기</button></div></div>
               <p class="form-error" id="upload-error" role="alert" hidden></p>
             </div>
-            <aside class="drawing-guide" aria-label="그림과 시연 결과 안내"><img width="1774" height="887" src="./assets/htp-synthetic-sample.png" alt="시연용으로 만든 집, 나무, 사람 그림 예시" /><div><strong>그림 한 장으로 아이의 마음을 단정할 수 없어요.</strong><p>아이의 말과 일상, 보호자의 관찰을 함께 살피는 출발점입니다.</p><small>시연용 합성 그림 · 실제 AI 분석은 진행되지 않습니다.</small></div></aside>
-            <p class="under-note"><span>ⓘ</span> 마인드로잉은 진단 서비스가 아닙니다. 걱정이 계속된다면 전문가와 직접 상담해 주세요.</p>
+            <aside class="drawing-guide" aria-label="그림 예시 안내"><img width="1774" height="887" src="./assets/htp-synthetic-sample.png" alt="시연용으로 만든 집, 나무, 사람 그림 예시" /><div><strong>예시 그림에서 보이는 특징부터 시작해요.</strong><p>집은 생활 공간, 나무는 성장과 활력, 사람은 자기 모습을 이야기할 소재로 쓰여 왔습니다.</p><small>시연용 합성 그림 · 등록한 그림을 분석하지 않습니다.</small></div></aside>
           </section>
           <section id="secondary-view" hidden></section>
         </main>

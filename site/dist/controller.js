@@ -4,7 +4,7 @@ import { renderEvidenceView, renderCounselView } from './reference-views.js';
 
 const main = document.querySelector('#main-content');
 const initialStudio = main.innerHTML;
-const navLabels = { studio: '그림 살펴보기', records: '내 기록', counsel: '상담 연결', evidence: '근거와 한계' };
+const navLabels = { studio: '그림의 의미', records: '내 기록', counsel: '상담 연결', evidence: '근거와 한계' };
 const emptyContext = () => ({ nickname: '', age: '', concerns: [], duration: '', impact: '', note: '' });
 const state = {
   view: 'studio', step: 1, sample: false,
@@ -308,13 +308,13 @@ function handleAction(button) {
     const items = state.context.concerns;
     state.context.concerns = items.includes(value) ? items.filter((item) => item !== value) : [...items, value];
     state.draftRevision++;
-    render();
-    const next = [...main.querySelectorAll('[data-action="concern"]')].find((item) => item.dataset.value === value);
-    next?.focus();
+    const selected = state.context.concerns.includes(value);
+    button.classList?.toggle('selected', selected);
+    button.setAttribute?.('aria-pressed', String(selected));
     return;
   }
   if (action === 'submit') {
-    if (!state.consent) return showError('시연 결과 안내를 확인해 주세요.');
+    if (!state.consent) return showError('시연 안내를 확인해 주세요.');
     state.error = ''; state.preparing = true; render(); focusHeading();
     setTimeout(() => {
       if (!state.preparing) return;
@@ -328,7 +328,7 @@ function handleAction(button) {
   if (action === 'tab') {
     state.activeKind = button.dataset.kind;
     render();
-    main.querySelector('[data-action="tab"][data-kind="' + state.activeKind + '"]')?.focus();
+    main.querySelector('[role="tab"][data-kind="' + state.activeKind + '"]')?.focus();
     return;
   }
   if (action === 'counsel') { prepareCounselContext(); return navigate('counsel'); }
@@ -480,7 +480,7 @@ if (document.modelContext?.registerTool) {
         validateInput(input);
         if (signal?.aborted) throw new DOMException('Aborted', 'AbortError');
         openDemoSample();
-        return { content: [{ type: 'text', text: 'Synthetic sample opened at the parent observation step.' }] };
+        return { content: [{ type: 'text', text: 'Synthetic sample opened at the demo notice step.' }] };
       }
     }));
     window.addEventListener('pagehide', () => registrations.forEach((registration) => registration?.unregister?.()), { once: true });
