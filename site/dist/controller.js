@@ -235,6 +235,7 @@ function handleAction(button) {
   if (action === 'next') {
     if (!KINDS.every((kind) => state.uploads[kind])) return showError('집, 나무, 사람 그림을 모두 등록하거나 예시로 체험해 주세요.');
     invalidateUploads();
+    state.sample = false;
     state.step = 2; state.error = ''; render(); focusHeading(); return;
   }
   if (action === 'remove-file') {
