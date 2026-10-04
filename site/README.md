@@ -1,5 +1,7 @@
 # Mindrawing mockup
 
+Product direction and interpretation principles: [canonical repository README](../README.md). This file documents implementation and verification only. The per-drawing overview is not an integrated interpretation of multiple features.
+
 Static Korean product mockup in `dist/`. Serve that directory with any static HTTP server. There is no build step, server API, account, or paid AI integration.
 
 ## Implementation status
