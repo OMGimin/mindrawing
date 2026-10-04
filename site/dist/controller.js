@@ -13,6 +13,10 @@ const state = {
   activeKind: 'house', error: '', preparing: false, storageError: '', counselContext: null
 };
 let statusTimer;
+const uploadRequests = { house: 0, tree: 0, person: 0 };
+function invalidateUploads() {
+  for (const kind of KINDS) uploadRequests[kind]++;
+}
 function announce(message) {
   const target = document.querySelector('#app-status');
   clearTimeout(statusTimer);
@@ -100,6 +104,7 @@ function render() {
   document.title = navLabels[state.view] + ' · 마인드로잉';
 }
 function navigate(view) {
+  if (view !== 'studio' || state.step !== 1) invalidateUploads();
   state.view = view;
   if (view !== 'records') state.selectedRecordId = null;
   state.error = '';
@@ -126,11 +131,20 @@ async function decodeFile(file) {
   }
 }
 async function setFile(kind, file) {
+  if (!KINDS.includes(kind) || state.view !== 'studio' || state.step !== 1) return;
+  const request = ++uploadRequests[kind];
   const problem = validateImage(file);
   if (problem) return showError(problem);
   let url;
   try { url = await decodeFile(file); }
-  catch (error) { return showError(error.message); }
+  catch (error) {
+    if (request === uploadRequests[kind] && state.view === 'studio' && state.step === 1) showError(error.message);
+    return;
+  }
+  if (request !== uploadRequests[kind] || state.view !== 'studio' || state.step !== 1) {
+    URL.revokeObjectURL(url);
+    return;
+  }
   if (state.uploads[kind]?.url) URL.revokeObjectURL(state.uploads[kind].url);
   state.uploads[kind] = { url, name: file.name };
   state.sample = false;
@@ -139,12 +153,14 @@ async function setFile(kind, file) {
   announce(LABELS[kind] + ' 그림을 등록했습니다.');
 }
 function openDemoSample() {
+  invalidateUploads();
   state.sample = true;
   state.step = 2;
   state.error = '';
   navigate('studio');
 }
 function resetDraft() {
+  invalidateUploads();
   for (const kind of KINDS) {
     if (state.uploads[kind]?.url) URL.revokeObjectURL(state.uploads[kind].url);
     state.uploads[kind] = null;
@@ -218,10 +234,13 @@ function handleAction(button) {
   if (action === 'sample') return openDemoSample();
   if (action === 'next') {
     if (!KINDS.every((kind) => state.uploads[kind])) return showError('집, 나무, 사람 그림을 모두 등록하거나 예시로 체험해 주세요.');
+    invalidateUploads();
     state.step = 2; state.error = ''; render(); focusHeading(); return;
   }
   if (action === 'remove-file') {
     const kind = button.dataset.kind;
+    if (!KINDS.includes(kind)) return;
+    uploadRequests[kind]++;
     if (state.uploads[kind]?.url) URL.revokeObjectURL(state.uploads[kind].url);
     state.uploads[kind] = null;
     state.error = '';
@@ -364,10 +383,7 @@ window.addEventListener('hashchange', () => {
   const target = location.hash.slice(1);
   if (navLabels[target]) {
     if (target === 'counsel') prepareCounselContext();
-    state.view = target;
-    state.selectedRecordId = null;
-    render();
-    focusHeading();
+    navigate(target);
   }
 });
 const privacy = document.querySelector('#privacy-dialog');
