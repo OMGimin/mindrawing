@@ -11,9 +11,11 @@
     <link rel="stylesheet" href="./sample.css" />
     <link rel="stylesheet" href="./features.css" />
     <link rel="stylesheet" href="./interpretation.css" />
+    <link rel="stylesheet" href="./usability.css" />
     <script type="module" src="./controller.js"></script>
   </head>
   <body>
+    <a class="skip-link" href="#main-content">본문으로 건너뛰기</a>
     <div class="app-shell">
       <aside class="sidebar" aria-label="주 메뉴">
         <a class="brand" href="#studio" aria-label="마인드로잉 처음으로">
@@ -31,35 +33,31 @@
 
       <div class="main-frame">
         <header class="topbar">
-          <div class="breadcrumbs"><span>WORKSPACE</span><span class="slash">/</span><strong>그림 살펴보기</strong></div>
+          <div class="breadcrumbs"><span>마인드로잉</span><span class="slash">/</span><strong>그림 살펴보기</strong></div>
           <div class="top-actions"><span class="demo-pill"><span class="status-dot"></span> 시연 모드</span><button class="text-action" type="button" id="privacy-open">개인정보 안내 <span aria-hidden="true">↗</span></button></div>
         </header>
 
-        <main id="main-content">
+        <main id="main-content" tabindex="-1">
           <section class="studio-page" id="studio-view" aria-labelledby="page-title">
-            <div class="page-intro">
-              <div><p class="eyebrow"><span class="eyebrow-line"></span> 아이의 마음을 살피는 첫걸음</p><h1 id="page-title">아이의 마음이 궁금할 때,<br /><em>부담 없는 첫걸음.</em></h1><p class="intro-copy">그림과 일상 속 변화를 함께 살펴보세요. 보호자의 관찰을 정리하고, 필요할 때 상담으로 이어갈 수 있도록 도와드려요.</p></div>
-              <div class="intro-aside"><div class="sample-art-wrap"><img src="./assets/htp-synthetic-sample.png" alt="시연용으로 만든 집, 나무, 사람 그림 예시" /><span>시연용 합성 그림</span></div><p>그림 한 장으로 아이의 마음을 단정할 수 없어요.</p><span>아이의 말과 일상, 보호자의 관찰을 함께 살피는 출발점입니다.</span></div>
-            </div>
-
             <div class="work-card">
-              <div class="work-heading"><div><p class="section-kicker">01 — DRAWINGS</p><h2>아이의 그림을 등록해 주세요</h2><p>세 그림을 모두 올리거나, 예시로 먼저 체험할 수 있습니다.</p></div><div class="heading-actions"><button class="sample-button" type="button" data-action="sample">예시로 바로 체험하기</button><span class="step-label">1 / 3 단계</span></div></div>
+              <div class="work-heading"><div><h1 id="page-title" class="registration-title">아이의 그림을 등록해 주세요</h1><p>세 그림을 모두 올리거나, 예시로 먼저 체험할 수 있습니다.</p></div><div class="heading-actions"><button class="sample-button" type="button" data-action="sample">예시로 바로 체험하기</button><span class="step-label">1 / 3 단계</span></div></div>
               <ol class="stepper" aria-label="진행 단계"><li class="current" aria-current="step"><span>01</span> 그림 등록</li><li><span>02</span> 보호자 관찰</li><li><span>03</span> 결과 살펴보기</li></ol>
               <div class="upload-grid" id="upload-grid">
-                <div class="upload-card" data-kind="house"><div class="upload-meta"><span class="upload-number">01</span><span class="upload-letter" aria-hidden="true">H</span></div><h3>집 그림</h3><p>아이가 그린 집 그림</p><div class="drop-target" role="group" aria-label="집 그림 등록"><div class="drop-art" aria-hidden="true"><span class="drop-glyph">⌂</span></div><span class="drop-title">그림을 여기에 놓거나</span><label class="choose-button">파일 선택<input type="file" accept="image/jpeg,image/png,image/webp" data-file="house" /></label><span class="drop-help">JPG, PNG, WEBP · 최대 8MB</span></div></div>
-                <div class="upload-card" data-kind="tree"><div class="upload-meta"><span class="upload-number">02</span><span class="upload-letter" aria-hidden="true">T</span></div><h3>나무 그림</h3><p>아이가 그린 나무 그림</p><div class="drop-target" role="group" aria-label="나무 그림 등록"><div class="drop-art" aria-hidden="true"><span class="drop-glyph">♧</span></div><span class="drop-title">그림을 여기에 놓거나</span><label class="choose-button">파일 선택<input type="file" accept="image/jpeg,image/png,image/webp" data-file="tree" /></label><span class="drop-help">JPG, PNG, WEBP · 최대 8MB</span></div></div>
-                <div class="upload-card" data-kind="person"><div class="upload-meta"><span class="upload-number">03</span><span class="upload-letter" aria-hidden="true">P</span></div><h3>사람 그림</h3><p>아이가 그린 사람 그림</p><div class="drop-target" role="group" aria-label="사람 그림 등록"><div class="drop-art" aria-hidden="true"><span class="drop-glyph">♙</span></div><span class="drop-title">그림을 여기에 놓거나</span><label class="choose-button">파일 선택<input type="file" accept="image/jpeg,image/png,image/webp" data-file="person" /></label><span class="drop-help">JPG, PNG, WEBP · 최대 8MB</span></div></div>
+                <div class="upload-card" data-kind="house"><div class="upload-meta"><span class="upload-number">01</span><span class="upload-letter" aria-hidden="true">H</span></div><h3>집 그림</h3><p>아이가 그린 집 그림</p><div class="drop-target" role="group" aria-label="집 그림 등록"><div class="drop-art" aria-hidden="true"><span class="drop-glyph">⌂</span></div><span class="drop-title">그림을 여기에 놓거나</span><label class="choose-button">파일 선택<input type="file" accept="image/jpeg,image/png,image/webp" name="house" aria-label="집 그림 파일 선택" data-file="house" /></label><span class="drop-help">JPG, PNG, WEBP · 최대 8MB</span></div></div>
+                <div class="upload-card" data-kind="tree"><div class="upload-meta"><span class="upload-number">02</span><span class="upload-letter" aria-hidden="true">T</span></div><h3>나무 그림</h3><p>아이가 그린 나무 그림</p><div class="drop-target" role="group" aria-label="나무 그림 등록"><div class="drop-art" aria-hidden="true"><span class="drop-glyph">♧</span></div><span class="drop-title">그림을 여기에 놓거나</span><label class="choose-button">파일 선택<input type="file" accept="image/jpeg,image/png,image/webp" name="tree" aria-label="나무 그림 파일 선택" data-file="tree" /></label><span class="drop-help">JPG, PNG, WEBP · 최대 8MB</span></div></div>
+                <div class="upload-card" data-kind="person"><div class="upload-meta"><span class="upload-number">03</span><span class="upload-letter" aria-hidden="true">P</span></div><h3>사람 그림</h3><p>아이가 그린 사람 그림</p><div class="drop-target" role="group" aria-label="사람 그림 등록"><div class="drop-art" aria-hidden="true"><span class="drop-glyph">♙</span></div><span class="drop-title">그림을 여기에 놓거나</span><label class="choose-button">파일 선택<input type="file" accept="image/jpeg,image/png,image/webp" name="person" aria-label="사람 그림 파일 선택" data-file="person" /></label><span class="drop-help">JPG, PNG, WEBP · 최대 8MB</span></div></div>
               </div>
               <div class="work-footer"><p><span aria-hidden="true">◈</span> 그림은 이 브라우저에서만 미리 보여요. 서버에 전송하지 않습니다.</p><div class="footer-actions"><button class="ghost-button" type="button" data-action="sample">예시로 체험하기</button><button class="primary-button" type="button" data-action="next">다음 단계</button></div></div>
               <p class="form-error" id="upload-error" role="alert" hidden></p>
             </div>
+            <aside class="drawing-guide" aria-label="그림과 시연 결과 안내"><img width="1774" height="887" src="./assets/htp-synthetic-sample.png" alt="시연용으로 만든 집, 나무, 사람 그림 예시" /><div><strong>그림 한 장으로 아이의 마음을 단정할 수 없어요.</strong><p>아이의 말과 일상, 보호자의 관찰을 함께 살피는 출발점입니다.</p><small>시연용 합성 그림 · 실제 AI 분석은 진행되지 않습니다.</small></div></aside>
             <p class="under-note"><span>ⓘ</span> 마인드로잉은 진단 서비스가 아닙니다. 걱정이 계속된다면 전문가와 직접 상담해 주세요.</p>
           </section>
           <section id="secondary-view" hidden></section>
         </main>
       </div>
     </div>
-    <dialog id="privacy-dialog" class="modal"><div class="modal-head"><h2>개인정보 안내</h2><button class="icon-button" type="button" id="privacy-close" aria-label="닫기">×</button></div><p>지금은 시연 버전입니다. 등록한 그림은 이 브라우저에서 미리 보는 데만 사용하며 서버로 전송하지 않습니다. 기록 저장을 직접 선택한 경우에도 그림 파일은 저장하지 않습니다.</p><button class="primary-button" type="button" id="privacy-done">확인</button></dialog>
+    <dialog id="privacy-dialog" class="modal" aria-labelledby="privacy-title"><div class="modal-head"><h2 id="privacy-title">개인정보 안내</h2><button class="icon-button" type="button" id="privacy-close" aria-label="닫기">×</button></div><p>지금은 시연 버전입니다. 등록한 그림은 이 브라우저에서 미리 보는 데만 사용하며 서버로 전송하지 않습니다. 기록 저장을 직접 선택한 경우에도 그림 파일은 저장하지 않습니다.</p><button class="primary-button" type="button" id="privacy-done">확인</button></dialog>
     <p id="app-status" class="app-status" role="status" hidden></p>
   </body>
 </html>

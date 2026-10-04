@@ -24,7 +24,7 @@ export function renderEvidenceView() {
   return `
     <section class="work-card" style="${outerStyle}" aria-labelledby="evidence-title">
       <p style="font-size:14px;font-weight:700;color:#315bed;margin:0 0 8px">근거와 한계</p>
-      <h2 id="evidence-title" style="font-size:26px;line-height:1.35;margin:0 0 12px">그림으로 무엇을 확인할 수 있나요?</h2>
+      <h1 id="evidence-title" style="font-size:26px;line-height:1.35;margin:0 0 12px">그림으로 무엇을 확인할 수 있나요?</h1>
       <p>집·나무·사람 그림은 아이와 보호자가 첫 확인을 시작할 계기가 될 수 있습니다. 현재 연구만으로 한 장의 그림에서 아이의 우울, 불안, 가족관계나 상담 필요성을 판정할 수는 없습니다. 이 목업은 의학적 검사나 진단 결과를 제공하지 않습니다.</p>
       <div style="${gridStyle}">
         <article style="${cardStyle}">
@@ -84,7 +84,7 @@ export function renderCounselView(context = {}) {
   return `
     <section class="work-card" style="${outerStyle}" aria-labelledby="counsel-title">
       <p style="font-size:14px;font-weight:700;color:#315bed;margin:0 0 8px">전문가 도움 찾기</p>
-      <h2 id="counsel-title" style="font-size:26px;line-height:1.35;margin:0 0 12px">보호자가 다음 단계를 선택할 수 있습니다</h2>
+      <h1 id="counsel-title" style="font-size:26px;line-height:1.35;margin:0 0 12px">보호자가 다음 단계를 선택할 수 있습니다</h1>
       <p>그림 한 장만으로 상담 필요성을 결정하지 마세요. 최근의 행동·기분 변화가 얼마나 이어졌고 가정, 학교, 친구 관계에 어떤 영향을 주는지 함께 살펴보세요. 걱정이 지속되면 아래 공식 경로에서 상담을 요청할 수 있습니다.</p>
       <p style="padding:12px 14px;background:#f1f5ff;border-radius:10px">${ageLabel}</p>
       <div style="${gridStyle}">

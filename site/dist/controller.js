@@ -64,6 +64,7 @@ function syncUploads() {
     fileInput.type = 'file';
     fileInput.accept = 'image/jpeg,image/png,image/webp';
     fileInput.dataset.file = kind;
+    fileInput.setAttribute('aria-label', LABELS[kind] + ' 그림 교체');
     replace.append(fileInput);
     tools.append(replace);
     const remove = document.createElement('button');
@@ -72,6 +73,7 @@ function syncUploads() {
     remove.dataset.action = 'remove-file';
     remove.dataset.kind = kind;
     remove.textContent = '삭제';
+    remove.setAttribute('aria-label', LABELS[kind] + ' 그림 삭제');
     tools.append(remove);
     target.append(tools);
   }
@@ -120,6 +122,14 @@ function showError(message) {
   state.error = message;
   render();
   announce(message);
+  requestAnimationFrame(() => {
+    const target = state.step === 2 && !state.consent
+      ? main.querySelector('[data-field="consent"]')
+      : state.step === 3 && !state.persistOptIn
+        ? main.querySelector('[data-field="persistOptIn"]')
+        : main.querySelector('.form-error');
+    if (target) { target.tabIndex = target.matches?.('input') ? 0 : -1; target.focus(); }
+  });
 }
 async function decodeFile(file) {
   const url = URL.createObjectURL(file);
@@ -189,11 +199,13 @@ function renderConsultSummary() {
   return `<section class="work-card consult-summary" aria-labelledby="summary-title" style="margin-top:16px"><p class="section-kicker">CONSULTATION NOTES</p><h2 id="summary-title">상담 전에 가져갈 메모</h2><p style="font-size:12px;color:#7c89a0">아래에는 보호자가 직접 입력한 내용만 표시됩니다. 상담기관에 자동으로 전송되지 않습니다.</p>${contextList(c)}<button class="outline-button" type="button" data-action="copy-summary" style="margin-top:16px">요약 복사하기</button></section>`;
 }
 function persist(action, message) {
+  const focusedAction = document.activeElement?.dataset?.action;
   try {
     action();
     state.error = '';
     render();
     announce(message);
+    if (focusedAction === 'save') main.querySelector('[data-action="save"]')?.focus();
   } catch {
     showError('이 기기의 기록을 저장하거나 삭제할 수 없습니다. 기존 기록은 변경하지 않았습니다. 브라우저 저장 공간을 확인해 주세요.');
   }
