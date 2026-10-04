@@ -1,3 +1,5 @@
+import { INTERPRETATION_VERSION, interpretationText } from './interpretation-content.js';
+
 export const KINDS = ['house', 'tree', 'person'];
 export const LABELS = { house: '집', tree: '나무', person: '사람' };
 export const MAX_FILE_SIZE = 8 * 1024 * 1024;
@@ -80,7 +82,10 @@ export function reportText(record) {
   const lines = [
     '마인드로잉 시연 결과 · 실제 AI 분석 아님',
     `작성일: ${new Date(record.createdAt).toLocaleString('ko-KR')}`,
-    '그림: 시연용 예시 관찰만 제공. 등록한 그림 파일은 분석하거나 기록에 저장하지 않음.',
+    '그림: 시연용 합성 그림의 관찰·문헌 해석 예시만 제공. 등록한 그림 파일은 분석하거나 기록에 저장하지 않음.',
+    `해석 설명: 시연용 합성 그림에 미리 작성한 참고 예시. 저장 당시 분석 결과가 아닌 현재 버전(${INTERPRETATION_VERSION})의 문구.`,
+    '',
+    ...KINDS.flatMap((kind) => [interpretationText(kind), '']),
     `호칭: ${c.nickname || '입력하지 않음'}`,
     `나이: ${c.age ? `${c.age}세` : '입력하지 않음'}`,
     `관심 주제: ${c.concerns.length ? c.concerns.join(', ') : '선택하지 않음'}`,
