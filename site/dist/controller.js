@@ -5,12 +5,14 @@ import { renderEvidenceView, renderCounselView } from './reference-views.js';
 const main = document.querySelector('#main-content');
 const initialStudio = main.innerHTML;
 const navLabels = { studio: '그림 살펴보기', records: '내 기록', counsel: '상담 연결', evidence: '근거와 한계' };
+const emptyContext = () => ({ nickname: '', age: '', concerns: [], duration: '', impact: '', note: '' });
 const state = {
   view: 'studio', step: 1, sample: false,
   uploads: { house: null, tree: null, person: null },
-  context: { nickname: '', age: '', concerns: [], duration: '', impact: '', note: '' },
-  consent: false, persistOptIn: false, record: null, selectedRecordId: null,
-  activeKind: 'house', error: '', preparing: false, storageError: '', counselContext: null
+  context: emptyContext(),
+  consent: false, persistOptIn: false, record: null, recordDraftRevision: null,
+  draftRevision: 0, selectedRecordId: null,
+  activeKind: 'house', error: '', preparing: false, storageError: '', counselSource: { type: 'draft' }
 };
 let statusTimer;
 const uploadRequests = { house: 0, tree: 0, person: 0 };
@@ -90,7 +92,7 @@ function render() {
       ? renderReport(state, chosen, true) + '<div class="record-delete"><button class="danger-button" type="button" data-action="delete-record" data-id="' + esc(chosen.id) + '">이 기록 삭제</button></div>'
       : renderRecordList(records, state.storageError);
   } else if (state.view === 'counsel') {
-    main.innerHTML = renderCounselView(state.counselContext || state.record?.context || state.context) + renderConsultSummary();
+    main.innerHTML = renderCounselView(currentCounselContext()) + renderConsultSummary();
   } else {
     main.innerHTML = renderEvidenceView();
   }
@@ -105,6 +107,8 @@ function render() {
 }
 function navigate(view) {
   if (view !== 'studio' || state.step !== 1) invalidateUploads();
+  if (view === 'studio' && state.view !== 'studio') state.counselSource = { type: 'draft' };
+  if (view !== 'studio') state.preparing = false;
   state.view = view;
   if (view !== 'records') state.selectedRecordId = null;
   state.error = '';
@@ -147,6 +151,7 @@ async function setFile(kind, file) {
   }
   if (state.uploads[kind]?.url) URL.revokeObjectURL(state.uploads[kind].url);
   state.uploads[kind] = { url, name: file.name };
+  state.draftRevision++;
   state.sample = false;
   state.error = '';
   render();
@@ -154,6 +159,7 @@ async function setFile(kind, file) {
 }
 function openDemoSample() {
   invalidateUploads();
+  state.draftRevision++;
   state.sample = true;
   state.step = 2;
   state.error = '';
@@ -167,16 +173,19 @@ function resetDraft() {
   }
   state.sample = false;
   state.step = 1;
-  state.context = { nickname: '', age: '', concerns: [], duration: '', impact: '', note: '' };
+  state.context = emptyContext();
   state.consent = false;
   state.persistOptIn = false;
   state.record = null;
-  state.counselContext = null;
+  state.recordDraftRevision = null;
+  state.draftRevision++;
+  state.preparing = false;
+  state.counselSource = { type: 'draft' };
   state.error = '';
   navigate('studio');
 }
 function renderConsultSummary() {
-  const c = state.counselContext || state.record?.context || state.context;
+  const c = currentCounselContext();
   return `<section class="work-card consult-summary" aria-labelledby="summary-title" style="margin-top:16px"><p class="section-kicker">CONSULTATION NOTES</p><h2 id="summary-title">상담 전에 가져갈 메모</h2><p style="font-size:12px;color:#7c89a0">아래에는 보호자가 직접 입력한 내용만 표시됩니다. 상담기관에 자동으로 전송되지 않습니다.</p>${contextList(c)}<button class="outline-button" type="button" data-action="copy-summary" style="margin-top:16px">요약 복사하기</button></section>`;
 }
 function persist(action, message) {
@@ -193,13 +202,40 @@ function selectedRecord() {
   if (state.view !== 'records') return state.record;
   return getRecords().find((record) => record.id === state.selectedRecordId);
 }
+function currentCounselContext() {
+  if (state.counselSource.type === 'record') {
+    return getRecords().find((record) => record.id === state.counselSource.id)?.context || emptyContext();
+  }
+  return state.counselSource.type === 'draft' ? state.context : emptyContext();
+}
 function prepareCounselContext() {
   if (state.view === 'records' && state.selectedRecordId) {
-    state.counselContext = selectedRecord()?.context || null;
-  } else if (state.view === 'studio' && state.step === 3 && state.record) {
-    state.counselContext = state.record.context;
-  } else {
-    state.counselContext = state.context;
+    state.counselSource = { type: 'record', id: state.selectedRecordId };
+  } else if (state.view === 'studio') {
+    state.counselSource = { type: 'draft' };
+  }
+}
+function forgetDeletedRecords(ids) {
+  if (state.counselSource.type === 'record' && ids.includes(state.counselSource.id)) {
+    state.counselSource = { type: 'empty' };
+  }
+  if (state.record && ids.includes(state.record.id)) {
+    const hasNewDraft = state.draftRevision !== state.recordDraftRevision;
+    if (!hasNewDraft) {
+      state.context = emptyContext();
+      for (const kind of KINDS) {
+        if (state.uploads[kind]?.url) URL.revokeObjectURL(state.uploads[kind].url);
+        state.uploads[kind] = null;
+      }
+      invalidateUploads();
+      state.step = 1;
+      state.sample = false;
+    }
+    state.record = null;
+    state.recordDraftRevision = null;
+    state.consent = false;
+    state.persistOptIn = false;
+    state.preparing = false;
   }
 }
 function exportRecord(record) {
@@ -215,7 +251,7 @@ function exportRecord(record) {
   setTimeout(() => URL.revokeObjectURL(url), 30000);
 }
 async function copySummary() {
-  const c = state.counselContext || state.record?.context || state.context;
+  const c = currentCounselContext();
   const content = [
     '상담 준비 메모 · 마인드로잉 시연',
     '아이 호칭: ' + (c.nickname || '미입력'),
@@ -235,6 +271,7 @@ function handleAction(button) {
   if (action === 'next') {
     if (!KINDS.every((kind) => state.uploads[kind])) return showError('집, 나무, 사람 그림을 모두 등록하거나 예시로 체험해 주세요.');
     invalidateUploads();
+    if (state.sample) state.draftRevision++;
     state.sample = false;
     state.step = 2; state.error = ''; render(); focusHeading(); return;
   }
@@ -244,6 +281,7 @@ function handleAction(button) {
     uploadRequests[kind]++;
     if (state.uploads[kind]?.url) URL.revokeObjectURL(state.uploads[kind].url);
     state.uploads[kind] = null;
+    state.draftRevision++;
     state.error = '';
     render();
     announce(LABELS[kind] + ' 그림을 삭제했습니다.');
@@ -257,6 +295,7 @@ function handleAction(button) {
     const value = button.dataset.value;
     const items = state.context.concerns;
     state.context.concerns = items.includes(value) ? items.filter((item) => item !== value) : [...items, value];
+    state.draftRevision++;
     render();
     const next = [...main.querySelectorAll('[data-action="concern"]')].find((item) => item.dataset.value === value);
     next?.focus();
@@ -268,6 +307,7 @@ function handleAction(button) {
     setTimeout(() => {
       if (!state.preparing) return;
       state.record = recordFromState(state);
+      state.recordDraftRevision = state.draftRevision;
       state.preparing = false; state.step = 3; state.activeKind = 'house';
       render(); focusHeading();
     }, 800);
@@ -299,6 +339,7 @@ function handleAction(button) {
   }
   if (action === 'open-record') {
     state.selectedRecordId = button.dataset.id;
+    state.counselSource = { type: 'record', id: button.dataset.id };
     state.activeKind = 'house'; state.error = ''; render(); focusHeading(); return;
   }
   if (action === 'delete-record') {
@@ -306,18 +347,22 @@ function handleAction(button) {
     persist(() => {
       writeRecords(localStorage, readRecords(localStorage).filter((record) => record.id !== button.dataset.id));
       state.selectedRecordId = null;
-      state.counselContext = null;
+      forgetDeletedRecords([button.dataset.id]);
     }, '기록을 삭제했습니다.');
     return;
   }
   if (action === 'delete-all') {
     if (!window.confirm('저장된 모든 마인드로잉 기록을 이 기기에서 삭제할까요? 삭제 후 복원할 수 없습니다.')) return;
-    persist(() => { localStorage.removeItem(STORAGE_KEY); state.counselContext = null; }, '모든 기록을 삭제했습니다.');
+    persist(() => {
+      const ids = readRecords(localStorage).map((record) => record.id);
+      localStorage.removeItem(STORAGE_KEY);
+      forgetDeletedRecords(ids);
+    }, '모든 기록을 삭제했습니다.');
     return;
   }
   if (action === 'clear-corrupt') {
     if (!window.confirm('읽을 수 없는 저장 데이터를 삭제할까요? 삭제 후 복원할 수 없습니다.')) return;
-    persist(() => { localStorage.removeItem(STORAGE_KEY); state.counselContext = null; }, '저장 데이터를 삭제했습니다.');
+    persist(() => { localStorage.removeItem(STORAGE_KEY); if (state.counselSource.type === 'record') state.counselSource = { type: 'empty' }; }, '저장 데이터를 삭제했습니다.');
     return;
   }
   if (action === 'export') {
@@ -351,12 +396,12 @@ main.addEventListener('change', (event) => {
   const field = input.dataset.field;
   if (field === 'consent') state.consent = input.checked;
   else if (field === 'persistOptIn') state.persistOptIn = input.checked;
-  else state.context[field] = input.value;
+  else { state.context[field] = input.value; state.draftRevision++; }
   state.error = '';
 });
 main.addEventListener('input', (event) => {
   const field = event.target.dataset.field;
-  if (field === 'nickname' || field === 'note') state.context[field] = event.target.value;
+  if (field === 'nickname' || field === 'note') { state.context[field] = event.target.value; state.draftRevision++; }
 });
 main.addEventListener('dragover', (event) => {
   const card = event.target.closest('.upload-card');
